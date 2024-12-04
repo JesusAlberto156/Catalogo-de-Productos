@@ -1,16 +1,18 @@
-import { RouterProvider } from "react-router-dom";
-import  CdPRouter from "./navigation/NaviRoutesCdP";
-import Footer from "./components/footer/footer";
+import Footer from './components/footer/Footer';
+import Sidebar from './components/sidebar/SideBar';
 
-export default function app() {
-    return (
-        <>
-            <div id='div-app'>
-                <RouterProvider router={CdPRouter}/>
-                <div id='div-footer'>
-                    <Footer />
+export default function App({children}) {
+  return(
+    <div>
+        <div id="app-container">
+            <Sidebar/>
+            <div id="content">
+                <div id="main-content">
+                    {children}
                 </div>
             </div>
-        </>
-    );
-}
+            <Footer />
+        </div>
+    </div>
+  );
+};
