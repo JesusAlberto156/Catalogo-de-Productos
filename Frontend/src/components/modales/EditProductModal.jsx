@@ -23,19 +23,25 @@ const style = {
 export default function EditProductModal({ open, onClose, onEditProduct, product }) {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
+  const [productImage, setProductImage] = useState("");
   const [successMessage, setSuccessMessage] = useState(false);
-  const [errors, setErrors] = useState({ productName: "", productPrice: "" }); // Errores por campo
+  const [errors, setErrors] = useState({
+    productName: "",
+    productPrice: "",
+    productImage: "",
+  });
 
   useEffect(() => {
     if (product) {
       setProductName(product.nombre || "");
       setProductPrice(product.precio || "");
+      setProductImage(product.urlImagen || "");
     }
   }, [product]);
 
   const handleEditProduct = () => {
     let hasError = false;
-    const newErrors = { productName: "", productPrice: "" };
+    const newErrors = { productName: "", productPrice: "", productImage: "" };
 
     // Validación del nombre del producto
     if (!productName) {
@@ -51,11 +57,25 @@ export default function EditProductModal({ open, onClose, onEditProduct, product
       newErrors.productPrice = "El precio debe ser un número.";
       hasError = true;
     }
+ 
+    /*Validación de URL de la imagen
+    if (!productImage) {
+      newErrors.productImage = "La URL de la imagen es obligatoria.";
+      hasError = true;
+    } else if (!/^https?:\/\/.+\..+/.test(productImage)) {
+      newErrors.productImage = "La URL de la imagen no es válida.";
+      hasError = true;
+    } */
 
     setErrors(newErrors);
 
     if (!hasError) {
-      onEditProduct({ ...product, nombre: productName, precio: productPrice });
+      onEditProduct({
+        ...product,
+        nombre: productName,
+        precio: productPrice,
+        urlImagen: productImage,
+      });
 
       // Mostrar mensaje de éxito
       setSuccessMessage(true);
@@ -110,6 +130,15 @@ export default function EditProductModal({ open, onClose, onEditProduct, product
           margin="normal"
           error={!!errors.productPrice}
           helperText={errors.productPrice} // Muestra error debajo del campo
+        />
+        <TextField
+          label="URL de la Imagen"
+          value={productImage}
+          onChange={(e) => setProductImage(e.target.value)}
+          fullWidth
+          margin="normal"
+          error={!!errors.productImage}
+          helperText={errors.productImage} // Muestra error debajo del campo
         />
         <Box mt={3} display="flex" justifyContent="flex-end">
           <Button onClick={onClose} style={{ marginRight: "10px" }}>

@@ -26,17 +26,13 @@ import EditProductModal from "../components/modales/EditProductModal";
 import DeleteProductModal from "../components/modales/DeleteProductModal";
 
 const initialProducts = [
-    { id: 1, nombre: "Guitarra Acústica Yamaha", precio: "200" },
-    { id: 2, nombre: "Teclado Casio CTK-3500", precio: "150" },
-    { id: 3, nombre: "Batería Pearl Export Series", precio: "800" },
-    { id: 4, nombre: "Bajo Eléctrico Fender", precio: "600" },
-    { id: 5, nombre: "Amplificador Marshall 15W", precio: "120" },
-    { id: 6, nombre: "Micrófono Shure SM58", precio: "100" },
-    { id: 7, nombre: "Cajón Flamenco Meinl", precio: "180" },
-    { id: 8, nombre: "Pedal de Distorsión Boss DS-1", precio: "60" },
-    { id: 9, nombre: "Guitarra Eléctrica Fender Stratocaster", precio: "750" },
-    { id: 10, nombre: "Cinturón para guitarra", precio: "20" },
-  ];
+  { id: "P-CDP-0001", nombre: "Guitarra Acústica Yamaha", precio: "200", urlImagen: "https://example.com/guitarra.jpg" },
+  { id: "P-CDP-0002", nombre: "Teclado Casio CTK-3500", precio: "150", urlImagen: "https://example.com/teclado.jpg" },
+  { id: "P-CDP-0003", nombre: "Batería Pearl Export Series", precio: "800", urlImagen: "https://example.com/bateria.jpg" },
+  { id: "P-CDP-0004", nombre: "Bajo Eléctrico Fender", precio: "600", urlImagen: "https://example.com/bajo.jpg" },
+  { id: "P-CDP-0005", nombre: "Amplificador Marshall 15W", precio: "120", urlImagen: "https://example.com/amplificador.jpg" },
+];
+
 
 export default function Productos() {
   const [productos, setProductos] = useState(initialProducts);
@@ -76,12 +72,19 @@ export default function Productos() {
   const handleOpenAddModal = () => setIsAddModalOpen(true);
   const handleCloseAddModal = () => setIsAddModalOpen(false);
 
-  // Función para agregar un producto
-  const handleAddProduct = (newProduct) => {
-    const updatedProducts = [...productos, newProduct];
-    setProductos(updatedProducts);
-    setFilteredProducts(updatedProducts);
-  };
+// Función para agregar un producto
+const handleAddProduct = (newProduct) => {
+  // Generar el nuevo ID_Producto basado en la longitud actual de productos
+  const newId = `P-CDP-${(productos.length + 1).toString().padStart(4, "0")}`;
+  
+  // Agregar el ID_Producto generado al nuevo producto
+  const updatedProduct = { ...newProduct, id: newId };
+
+  // Actualizar la lista de productos
+  const updatedProducts = [...productos, updatedProduct];
+  setProductos(updatedProducts);
+  setFilteredProducts(updatedProducts);
+}
 
   // Función para abrir el modal de editar
   const handleOpenEditModal = () => setIsEditModalOpen(true);
@@ -205,62 +208,92 @@ export default function Productos() {
       </div>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
-            <TableRow style={{ backgroundColor: "#4caf50" }}>
-            <TableCell
-                style={{
-                    fontWeight: "bold",
-                    color: "#fff",
-                    fontSize: "16px",
-                    textTransform: "uppercase",
-                }}
-                >
-                ID
-                </TableCell>
-                <TableCell
-                style={{
-                    fontWeight: "bold",
-                    color: "#fff",
-                    fontSize: "16px",
-                    textTransform: "uppercase",
-                }}
-                >
-                Nombre
-                </TableCell>
-                        <TableCell style={{
-                    fontWeight: "bold",
-                    color: "#fff",
-                    fontSize: "16px",
-                    textTransform: "uppercase",
-                }}>
-                Precio
-                <IconButton onClick={handleOpenFilterMenu}>
-                  <FilterListIcon />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleCloseFilterMenu}
-                >
-                  <MenuItem onClick={() => handleFilterByPrice("Todos")}>Todos</MenuItem>
-                  <MenuItem onClick={() => handleFilterByPrice("Menor a 200")}>Menor a 200</MenuItem>
-                  <MenuItem onClick={() => handleFilterByPrice("Entre 200 y 500")}>
-                    Entre 200 y 500
-                  </MenuItem>
-                  <MenuItem onClick={() => handleFilterByPrice("Mayor a 500")}>Mayor a 500</MenuItem>
-                </Menu>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredProducts.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((producto) => (
-              <TableRow key={producto.id} onClick={() => setSelectedProduct(producto)}>
-                <TableCell>{producto.id}</TableCell>
-                <TableCell>{producto.nombre}</TableCell>
-                <TableCell>${producto.precio}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+        <TableHead>
+  <TableRow style={{ backgroundColor: "#4caf50" }}>
+    <TableCell
+      style={{
+        fontWeight: "bold",
+        color: "#fff",
+        fontSize: "16px",
+        textTransform: "uppercase",
+      }}
+    >
+      ID_Producto
+    </TableCell>
+    <TableCell
+      style={{
+        fontWeight: "bold",
+        color: "#fff",
+        fontSize: "16px",
+        textTransform: "uppercase",
+      }}
+    >
+      Nombre
+    </TableCell>
+    <TableCell
+      style={{
+        fontWeight: "bold",
+        color: "#fff",
+        fontSize: "16px",
+        textTransform: "uppercase",
+      }}
+    >
+      Precio
+      <IconButton onClick={handleOpenFilterMenu}>
+        <FilterListIcon style={{ color: "#fff" }} />
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseFilterMenu}
+      >
+        <MenuItem onClick={() => handleFilterByPrice("Todos")}>Todos</MenuItem>
+        <MenuItem onClick={() => handleFilterByPrice("Menor a 200")}>Menor a 200</MenuItem>
+        <MenuItem onClick={() => handleFilterByPrice("Entre 200 y 500")}>
+          Entre 200 y 500
+        </MenuItem>
+        <MenuItem onClick={() => handleFilterByPrice("Mayor a 500")}>Mayor a 500</MenuItem>
+      </Menu>
+    </TableCell>
+    <TableCell
+      style={{
+        fontWeight: "bold",
+        color: "#fff",
+        fontSize: "16px",
+        textTransform: "uppercase",
+      }}
+    >
+      URL Imagen
+    </TableCell>
+  </TableRow>
+</TableHead>
+<TableBody>
+  {filteredProducts
+    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    .map((producto) => (
+      <TableRow key={producto.id} onClick={() => setSelectedProduct(producto)}>
+        <TableCell>{producto.id}</TableCell>
+        <TableCell>{producto.nombre}</TableCell>
+        <TableCell>${producto.precio}</TableCell>
+        <TableCell>
+          {producto.urlImagen ? (
+            <a
+              href={producto.urlImagen}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#1a73e8", textDecoration: "none" }}
+            >
+              Ver Imagen
+            </a>
+          ) : (
+            "Sin URL"
+          )}
+        </TableCell>
+      </TableRow>
+    ))}
+</TableBody>
+
+
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 15]}

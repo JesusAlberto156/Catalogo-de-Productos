@@ -19,7 +19,7 @@ export default function Sidebar() {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [loadingInventory, setLoadingInventory] = useState(false);
   const [loadingSales, setLoadingSales] = useState(false);
-  const [profileImage, setProfileImage] = useState("https://cdn-icons-png.flaticon.com/256/9505/9505872.png");
+  const [profileImage, setProfileImage] = useState("https://i.pinimg.com/736x/48/17/0f/48170f2365dda8b63acc5d5d36c7a9ff.jpg");
   const navigate = useNavigate();
 
   const handleImageUpload = (event) => {

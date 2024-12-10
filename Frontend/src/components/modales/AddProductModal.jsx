@@ -23,12 +23,17 @@ const style = {
 export default function AddProductModal({ open, onClose, onAddProduct, nextId }) {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
+  const [productImage, setProductImage] = useState("");
   const [successMessage, setSuccessMessage] = useState(false);
-  const [errors, setErrors] = useState({ productName: "", productPrice: "" }); // Errores por campo
+  const [errors, setErrors] = useState({
+    productName: "",
+    productPrice: "",
+    productImage: "",
+  });
 
   const handleAddProduct = () => {
     let hasError = false;
-    const newErrors = { productName: "", productPrice: "" };
+    const newErrors = { productName: "", productPrice: "", productImage: "" };
 
     // Validación de nombre del producto
     if (!productName) {
@@ -45,12 +50,27 @@ export default function AddProductModal({ open, onClose, onAddProduct, nextId })
       hasError = true;
     }
 
+    /* Validación de URL de la imagen
+    if (!productImage) {
+      newErrors.productImage = "La URL de la imagen es obligatoria.";
+      hasError = true;
+    } else if (!/^https?:\/\/.+\..+/.test(productImage)) {
+      newErrors.productImage = "La URL de la imagen no es válida.";
+      hasError = true;
+    } */
+
     setErrors(newErrors);
 
     if (!hasError) {
-      onAddProduct({ id: nextId, nombre: productName, precio: productPrice });
+      onAddProduct({
+        id: nextId,
+        nombre: productName,
+        precio: productPrice,
+        urlImagen: productImage,
+      });
       setProductName(""); // Limpia el campo de nombre
       setProductPrice(""); // Limpia el campo de precio
+      setProductImage(""); // Limpia el campo de URL
 
       // Mostrar el mensaje de éxito
       setSuccessMessage(true);
@@ -105,6 +125,15 @@ export default function AddProductModal({ open, onClose, onAddProduct, nextId })
           margin="normal"
           error={!!errors.productPrice}
           helperText={errors.productPrice} // Muestra el error debajo del campo
+        />
+        <TextField
+          label="URL de la Imagen"
+          value={productImage}
+          onChange={(e) => setProductImage(e.target.value)}
+          fullWidth
+          margin="normal"
+          error={!!errors.productImage}
+          helperText={errors.productImage} // Muestra el error debajo del campo
         />
         <Box mt={3} display="flex" justifyContent="flex-end">
           <Button onClick={onClose} style={{ marginRight: "10px" }}>
