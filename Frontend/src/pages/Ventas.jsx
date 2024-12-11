@@ -13,7 +13,7 @@ import { Titulo } from "../components/styled/Texts";
 import { Button,ButtonG,ButtonE,ButtonD } from "../components/styled/Buttons";
 import { TablaVentas,Tabla,Td,Th,Tr } from "../components/styled/Tables";
 
-export default function Ventas({ ventas,addVenta,editVenta,deleteVenta }) {
+export default function Ventas({ productos,ventas,addVenta,editVenta,deleteVenta }) {
     
     document.title = "CdP - Ventas";
 

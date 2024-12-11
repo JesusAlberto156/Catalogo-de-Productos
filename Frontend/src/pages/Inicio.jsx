@@ -4,7 +4,7 @@ import NavBar from "../components/navbar/NavBar";
 import Productos from '../components/card/Productos';
 import Ventas from '../components/card/Ventas';
 
-export default function Inicio() {
+export default function Inicio({ Productos,Ventas }) {
     
     document.title = "CdP - Inicio";
 
