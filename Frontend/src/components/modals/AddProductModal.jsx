@@ -68,6 +68,7 @@ export default function AddProductModal({ open, onClose, onAddProduct, nextId })
         precio: productPrice,
         urlImagen: productImage,
       });
+
       setProductName(""); // Limpia el campo de nombre
       setProductPrice(""); // Limpia el campo de precio
       setProductImage(""); // Limpia el campo de URL

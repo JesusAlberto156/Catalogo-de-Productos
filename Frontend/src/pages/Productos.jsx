@@ -21,22 +21,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SearchIcon from "@mui/icons-material/Search";
 import App from "../app";
-import AddProductModal from "../components/modales/AddProductModal";
-import EditProductModal from "../components/modales/EditProductModal";
-import DeleteProductModal from "../components/modales/DeleteProductModal";
+import AddProductModal from "../components/modals/AddProductModal";
+import EditProductModal from "../components/modals/EditProductModal";
+import DeleteProductModal from "../components/modals/DeleteProductModal";
 
-const initialProducts = [
-  { id: "P-CDP-0001", nombre: "Guitarra Acústica Yamaha", precio: "200", urlImagen: "https://example.com/guitarra.jpg" },
-  { id: "P-CDP-0002", nombre: "Teclado Casio CTK-3500", precio: "150", urlImagen: "https://example.com/teclado.jpg" },
-  { id: "P-CDP-0003", nombre: "Batería Pearl Export Series", precio: "800", urlImagen: "https://example.com/bateria.jpg" },
-  { id: "P-CDP-0004", nombre: "Bajo Eléctrico Fender", precio: "600", urlImagen: "https://example.com/bajo.jpg" },
-  { id: "P-CDP-0005", nombre: "Amplificador Marshall 15W", precio: "120", urlImagen: "https://example.com/amplificador.jpg" },
-];
-
-
-export default function Productos() {
+export default function Productos({ initialProducts,onAddProduct,onEditProduct,onDeleteProduct,filteredProducts,setFilteredProducts }) {
   const [productos, setProductos] = useState(initialProducts);
-  const [filteredProducts, setFilteredProducts] = useState(initialProducts);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -72,43 +62,13 @@ export default function Productos() {
   const handleOpenAddModal = () => setIsAddModalOpen(true);
   const handleCloseAddModal = () => setIsAddModalOpen(false);
 
-// Función para agregar un producto
-const handleAddProduct = (newProduct) => {
-  // Generar el nuevo ID_Producto basado en la longitud actual de productos
-  const newId = `P-CDP-${(productos.length + 1).toString().padStart(4, "0")}`;
-  
-  // Agregar el ID_Producto generado al nuevo producto
-  const updatedProduct = { ...newProduct, id: newId };
-
-  // Actualizar la lista de productos
-  const updatedProducts = [...productos, updatedProduct];
-  setProductos(updatedProducts);
-  setFilteredProducts(updatedProducts);
-}
-
   // Función para abrir el modal de editar
   const handleOpenEditModal = () => setIsEditModalOpen(true);
   const handleCloseEditModal = () => setIsEditModalOpen(false);
 
-  // Función para editar un producto
-  const handleEditProduct = (updatedProduct) => {
-    const updatedProducts = productos.map((producto) =>
-      producto.id === updatedProduct.id ? updatedProduct : producto
-    );
-    setProductos(updatedProducts);
-    setFilteredProducts(updatedProducts);
-  };
-
   // Función para abrir el modal de eliminar
   const handleOpenDeleteModal = () => setIsDeleteModalOpen(true);
   const handleCloseDeleteModal = () => setIsDeleteModalOpen(false);
-
-  // Función para eliminar un producto
-  const handleDeleteProduct = (id) => {
-    const updatedProducts = productos.filter((producto) => producto.id !== id);
-    setProductos(updatedProducts);
-    setFilteredProducts(updatedProducts);
-  };
 
   // Función para manejar el filtro por precio
   const handleOpenFilterMenu = (event) => {
@@ -154,7 +114,7 @@ const handleAddProduct = (newProduct) => {
   };
 
   return (
-    <App>
+    <>
       <h2 style={{ textAlign: "center", margin: "20px 0", color: "#333" }}>
         Módulo de Productos
       </h2>
@@ -310,19 +270,19 @@ const handleAddProduct = (newProduct) => {
       <AddProductModal
         open={isAddModalOpen}
         onClose={handleCloseAddModal}
-        onAddProduct={handleAddProduct}
+        onAddProduct={onAddProduct}
         nextId={productos.length + 1}
       />
       <EditProductModal
         open={isEditModalOpen}
         onClose={handleCloseEditModal}
-        onEditProduct={handleEditProduct}
+        onEditProduct={onEditProduct}
         product={selectedProduct}
       />
       <DeleteProductModal
         open={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
-        onDeleteProduct={handleDeleteProduct}
+        onDeleteProduct={onDeleteProduct}
         product={selectedProduct}
       />
       <br/>
@@ -333,6 +293,6 @@ const handleAddProduct = (newProduct) => {
       <br/>
       <br/>
       
-    </App>
+    </>
   );
 }

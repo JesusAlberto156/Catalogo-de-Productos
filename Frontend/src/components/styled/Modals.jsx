@@ -1,8 +1,10 @@
-.modal-container {
-    position: relative;
-}
+import styled from 'styled-components';
 
-.modal {
+export const ModalContainer = styled.div`
+    position: relative;
+`;
+
+export const Modal = styled.div`
     position: fixed;
     top: 0;
     left: 0;
@@ -14,9 +16,9 @@
     align-items: center;
     z-index: 1000;
     overflow-y: auto;
-}
+`;
 
-.modal-content {
+export const ModalContent = styled.div`
     max-height: 90vh;
     max-width: 90vw;
     overflow-y: auto;
@@ -25,4 +27,4 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-}
+`;

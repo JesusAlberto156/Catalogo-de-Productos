@@ -10,17 +10,14 @@ import { FaSignOutAlt } from "react-icons/fa";
 
 import './Sidebar.css';
 
-export default function Sidebar() {
+export default function Sidebar({ onSwitchView }) {
+  
   const [isVisible, setIsVisible] = useState(() => {
     const storedState = localStorage.getItem("sidebarVisible");
     return storedState === "true";
   });
-  const [loadingHome, setLoadingHome] = useState(false);
-  const [loadingProducts, setLoadingProducts] = useState(false);
-  const [loadingInventory, setLoadingInventory] = useState(false);
-  const [loadingSales, setLoadingSales] = useState(false);
+
   const [profileImage, setProfileImage] = useState("https://i.pinimg.com/736x/48/17/0f/48170f2365dda8b63acc5d5d36c7a9ff.jpg");
-  const navigate = useNavigate();
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -50,44 +47,6 @@ export default function Sidebar() {
     }
   }, [isVisible]);
   
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-  const Home = async () => {
-    setLoadingHome(true);
-    document.title = "Cargando...";
-    await delay(1000);
-    navigate("/Inicio",{replace: true});
-    document.title = "CdP - Inicio";
-    setLoadingHome(false);
-  };
-
-  const Products = async () => {
-    setLoadingProducts(true);
-    document.title = "Cargando...";
-    await delay(1000);
-    navigate("/Productos",{replace: true});
-    document.title = "CdP - Productos";
-    setLoadingProducts(false);
-  };
-
-  const Inventory = async () => {
-    setLoadingInventory(true);
-    document.title = "Cargando...";
-    await delay(1000);
-    navigate("/Inventario",{replace: true});
-    document.title = "CdP - Inventario";
-    setLoadingInventory(false);
-  };
-
-  const Sales = async () => {
-    setLoadingSales(true);
-    document.title = "Cargando...";
-    await delay(1000);
-    navigate("/Ventas",{replace: true});
-    document.title = "CdP - Ventas";
-    setLoadingSales(false);
-  };
-
   return (
     <>
       <button className="toggle-button" onClick={toggleSidebar}>
@@ -110,24 +69,24 @@ export default function Sidebar() {
           />
         </div>
         <ul>
-          <li><a onClick={Home}>Inicio
+          <li><a onClick={() => onSwitchView('Inicio')}>Inicio
               <span style={{ marginLeft: "145px" }}><FaHome/></span>
             </a>
           </li>
-          <li><a onClick={Products}>Productos
+          <li><a onClick={() => onSwitchView('Productos')}>Productos
               <span style={{ marginLeft: "110px" }} className="icon-style-product"><MdProductionQuantityLimits/></span>
             </a>
           </li>
-          <li><a onClick={Inventory}>Inventario
+          <li><a onClick={() => onSwitchView('Inventario')}>Inventario
               <span style={{ marginLeft: "110px" }} className="icon-style-inventory"><MdOutlineInventory/></span>
             </a>
           </li>
-          <li><a onClick={Sales}>Ventas
+          <li><a onClick={() => onSwitchView('Ventas')}>Ventas
               <span style={{ marginLeft: "130px" }}><FcSalesPerformance/></span>
             </a>
           </li>
           <li>
-            <a>Cuenta
+            <a onClick={() => onSwitchView('Cuenta')}>Cuenta
               <span style={{ marginLeft: "130px" }} className="icon-style-account"><MdAccountCircle/></span>
             </a>
           </li>
