@@ -151,7 +151,10 @@ export default function App() {
             <div id="content">
                 <div id="main-content">
                   {activeView === 'Inicio' ? (
-                    <Inicio/>
+                    <Inicio
+                      Productos={productos}
+                      Ventas={ventas}
+                    />
                   ):(
                     <></>
                   )}
@@ -168,12 +171,15 @@ export default function App() {
                     <></>
                   )}
                   {activeView === 'Inventario' ? (
-                    <Inventario/>
+                    <Inventario
+                      Productos={productos}
+                    />
                   ):(
                     <></>
                   )}
                   {activeView === 'Ventas' ? (
                     <Ventas 
+                      productos={productos}
                       ventas={ventas} 
                       addVenta={addVenta}
                       editVenta={editVenta}
