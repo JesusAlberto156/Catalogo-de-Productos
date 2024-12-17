@@ -1,7 +1,11 @@
-import { ContentButton,ButtonClose } from '../styled/Buttons'
+import { ContentButton,ButtonIconClose } from '../styled/Buttons'
 import { ModalContainer,Modal,ModalContent } from '../styled/Modals'
 import { DropdownList,Li } from '../styled/Lists'
 import { Titulo } from '../styled/Texts';
+
+import { Tooltip } from '@mui/material';
+
+import { IoIosCloseCircleOutline } from "react-icons/io";
 
 export default function GetSaleModal ({ Venta, OpenModalGet, toggleModalGet }){
 
@@ -33,7 +37,9 @@ export default function GetSaleModal ({ Venta, OpenModalGet, toggleModalGet }){
                         <Li>Monto total: {Venta.MontoTotal}</Li>
                     </DropdownList>
                     <ContentButton>
-                        <ButtonClose onClick={toggleModalGet}>Cerrar</ButtonClose>
+                        <Tooltip title='Cerrar'>
+                            <ButtonIconClose onClick={toggleModalGet}><IoIosCloseCircleOutline/></ButtonIconClose>
+                        </Tooltip>
                     </ContentButton>
                 </ModalContent>
             </Modal>

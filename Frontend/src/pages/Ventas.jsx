@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import { GrView } from "react-icons/gr";
+import { GrView,GrNext,GrPrevious } from "react-icons/gr";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { FcSearch } from "react-icons/fc";
 
 import AddSaleModal from "../components/modals/AddSaleModal";
 import GetSaleModal from "../components/modals/GetSaleModal";
@@ -10,12 +12,42 @@ import EditSaleModal from "../components/modals/EditSaleModal";
 import DeleteSaleModal from "../components/modals/DeleteSaleModal";
 
 import { Titulo } from "../components/styled/Texts";
-import { Button,ButtonG,ButtonE,ButtonD } from "../components/styled/Buttons";
+import { ButtonIconBlue,ButtonIconD,ButtonIconE,ButtonIconV,ContentButton,Pagination } from "../components/styled/Buttons";
 import { TablaVentas,Tabla,Td,Th,Tr } from "../components/styled/Tables";
+import { Tooltip } from "@mui/material";
 
-export default function Ventas({ productos,ventas,addVenta,editVenta,deleteVenta }) {
+export default function Ventas({ ID,productos,ventas,addVenta,editVenta,deleteVenta }) {
     
     document.title = "CdP - Ventas";
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const recordsPerPage = 8;
+
+    const filteredRecords = ventas.filter((venta) =>
+        Object.values(venta).some((value) =>
+          value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    );
+
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+    const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+    
+    const nextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    const [selectedRow, setSelectedRow] = useState(null);
+
+    const handleRowClick = (venta) => {
+        setSelectedRow((prevSelected) => (prevSelected === venta ? null : venta));
+    };
 
     const [OpenModalAdd, setOpenModalAdd] = useState(false);
     const [OpenModalGet, setOpenModalGet] = useState(false);
@@ -24,7 +56,6 @@ export default function Ventas({ productos,ventas,addVenta,editVenta,deleteVenta
 
     const [Venta, setVenta] = useState(null);
     const [VentaId, setVentaId] = useState(null);
-    const [editedVenta, setEditedVenta] = useState(Venta);
 
     //INSERTAR
     const toggleModalAdd = () => {
@@ -38,73 +69,74 @@ export default function Ventas({ productos,ventas,addVenta,editVenta,deleteVenta
     };
     //MOSTRAR
     //EDITAR
-     const toggleModalEdit = (Venta) => {
+    const toggleModalEdit = (Venta) => {
         setOpenModalEdit(!OpenModalEdit);
-        setEditedVenta(Venta);
+        setVenta(Venta);
     };
-    const deleteProducto = (index) => {
-        const updatedProductos = [...editedVenta.Productos];
-        updatedProductos.splice(index, 1);
-        setEditedVenta({
-            ...editedVenta,
-            Productos: updatedProductos,
-        });
-    };
-    const addProducto = () => {
-        const newProducto = {
-            IdProducto: '',
-            Nombre: '',
-            Cantidad: '',
-            PrecioUnitario: 0,
-        };
-        setEditedVenta({
-            ...editedVenta,
-            Productos: [...editedVenta.Productos, newProducto],
-        });
-    };
-    const handleEditChange = (e, productoIndex = null, productoField = null) => {
-        const { name, value } = e.target;
-
-        if (productoIndex !== null && productoField !== null) {
-            const updatedProductos = [...editedVenta.Productos];
-            updatedProductos[productoIndex][productoField] = value;
-    
-            setEditedVenta({
-                ...editedVenta,
-                Productos: updatedProductos,
-            });
-        } else {
-            setEditedVenta({
-                ...editedVenta,
-                [name]: value,
-            });
-        }
-    };
-    const handleSaveEdit = () => {
-        editVenta(editedVenta);
-        toggleModalEdit();
-    }
-    const handleCancelEdit = () => {
-        setEditedVenta(Venta);
-        toggleModalEdit();
-    }
     //EDITAR
     //ELIMINAR
     const toggleModalDelete = (Id) => {
         setOpenModalDelete(!OpenModalDelete);
         setVentaId(Id);
     };
-    const handleDeleteVenta = (Id) => {
-        deleteVenta(Id)
-        setOpenModalDelete(!OpenModalDelete);
-    }
     //ELIMINAR
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            const table = document.getElementById("TablaVentas");
+            if (table && !table.contains(event.target)) {
+                setSelectedRow(null);
+            }
+        };
     
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
+
     return ( 
         <>
             <Titulo>Listado de Ventas</Titulo>
-            <Button onClick={toggleModalAdd}>NUEVA VENTA</Button>
-            <TablaVentas>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+                <Tooltip title='Agregar venta'>
+                    <ButtonIconBlue onClick={toggleModalAdd}><IoMdAddCircleOutline/></ButtonIconBlue>
+                </Tooltip>
+                <button
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'auto'
+                    }}
+                >
+                    <FcSearch size={24}/>
+                </button>
+                <Tooltip title='Buscador' placement="right">
+                    <input
+                        type="text"
+                        placeholder="Buscar ventas..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        style={{
+                            padding: "10px",
+                            fontSize: "14px",
+                            border: 'none',
+                            backgroundColor: 'transparent',
+                            borderBottom: "2px solid #000",
+                            borderRadius: "6px",
+                            width: "250px",
+                        }}
+                    />
+                </Tooltip>
+                <Tooltip title='Ver venta'>
+                    <ButtonIconV disabled={selectedRow === null} onClick={() => toggleModalGet(selectedRow)}><GrView/></ButtonIconV>
+                </Tooltip>
+                <Tooltip title='Editar venta'>
+                    <ButtonIconE disabled={selectedRow === null} onClick={() => toggleModalEdit(selectedRow)}><MdModeEdit/></ButtonIconE>
+                </Tooltip>
+                <Tooltip title='Eliminar venta'>
+                    <ButtonIconD disabled={selectedRow === null} onClick={() => toggleModalDelete(selectedRow.IdVenta)}><MdDelete/></ButtonIconD>
+                </Tooltip>
+            </div>
+            <TablaVentas id="TablaVentas">
                 <Tabla>
                     <thead>
                     <Tr>
@@ -113,28 +145,41 @@ export default function Ventas({ productos,ventas,addVenta,editVenta,deleteVenta
                         <Th>Fecha</Th>
                         <Th>Hora</Th>
                         <Th>Monto Total</Th>
-                        <Th>Acciones</Th>
                     </Tr>
                     </thead>
                     <tbody>
-                    {ventas.map((venta) => (
-                        <Tr key={venta.IdVenta}>
+                    {currentRecords.map((venta) => (
+                        <Tr
+                            key={venta}
+                            onClick={() => handleRowClick(venta)}
+                            style={{
+                                backgroundColor: selectedRow === venta ? '#e0f7fa' : 'transparent',
+                                cursor: 'pointer',
+                            }}
+                        >
                             <Td>{venta.IdVenta}</Td>
                             <Td>{venta.TipoDePago}</Td>
                             <Td>{venta.Fecha}</Td>
                             <Td>{venta.Hora}</Td>
                             <Td>{venta.MontoTotal}</Td>
-                            <Td style={{ display: 'flex', gap: '15px' , justifyContent: 'center', alignItems: 'center'}}>
-                                <ButtonG onClick={() => toggleModalGet(venta)}><GrView/></ButtonG>
-                                <ButtonE onClick={() => toggleModalEdit(venta)}><MdModeEdit/></ButtonE>
-                                <ButtonD onClick={() => toggleModalDelete(venta.IdVenta)}><MdDelete/></ButtonD>
-                            </Td>
                         </Tr>
                     ))}
                     </tbody>
                 </Tabla>
-            </TablaVentas> 
+            </TablaVentas>
+            <Pagination>
+                <Tooltip title='Anterior página'>
+                    <button disabled={currentPage === 1} onClick={prevPage}><GrPrevious/></button>
+                </Tooltip>
+                <span>Página {currentPage} de {totalPages}</span>
+                <Tooltip title='Siguiente página'>
+                    <button disabled={currentPage === totalPages || totalPages === 0} onClick={nextPage}><GrNext/></button>
+                </Tooltip>
+            </Pagination> 
             <AddSaleModal 
+                ID={ID}
+                Ventas={ventas}
+                Productos={productos}
                 OpenModalAdd={OpenModalAdd} 
                 addVenta={addVenta} 
                 toggleModalAdd={toggleModalAdd}
@@ -145,19 +190,18 @@ export default function Ventas({ productos,ventas,addVenta,editVenta,deleteVenta
                 toggleModalGet={toggleModalGet}
             />
             <EditSaleModal 
-                editedVenta={editedVenta} 
+                Productos={productos}
+                Venta={Venta} 
                 OpenModalEdit={OpenModalEdit}
-                handleEditChange={handleEditChange}
-                handleSaveEdit={handleSaveEdit}
-                handleCancelEdit={handleCancelEdit}
-                addProducto={addProducto}
-                deleteProducto={deleteProducto}
+                editVenta={editVenta}
+                toggleModalEdit={toggleModalEdit}
             />
             <DeleteSaleModal 
                 VentaId={VentaId} 
+                deleteVenta={deleteVenta}
                 OpenModalDelete={OpenModalDelete}  
                 toggleModalDelete={toggleModalDelete} 
-                handleDeleteVenta={handleDeleteVenta}/>
+            />
         </>       
     );
 }
