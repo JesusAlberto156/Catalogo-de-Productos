@@ -116,7 +116,7 @@ export default function Productos({ initialProducts,onAddProduct,onEditProduct,o
   return (
     <>
       <h2 style={{ textAlign: "center", margin: "20px 0", color: "#333" }}>
-        Módulo de Productos
+        Listado de Productos
       </h2>
       <div style={{ display: "flex", justifyContent: "space-between", margin: "0 5% 10px" }}>
         <TextField

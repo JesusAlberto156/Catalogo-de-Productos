@@ -54,11 +54,10 @@ export default function App() {
   };
   //PRODUCTOS
 
-
   //VENTAS
   const [ventas,setVentas] = useState([
     {
-      IdVenta: 'CDP-0001',
+      IdVenta: 'V-CDP-0001',
       TipoDePago: 'Tarjeta',
       Fecha: '09/12/2024',
       Hora: '09:41',
@@ -78,42 +77,42 @@ export default function App() {
       MontoTotal: 1000
     },
     {
-      IdVenta: 'CDP-0002',
+      IdVenta: 'V-CDP-0002',
       TipoDePago: 'Efectivo',
       Fecha: '09/12/2024',
       Hora: '11:27',
       Productos: [
         {
-          IdProducto: 'P-CDP-0010',
-          Nombre: 'Cinturón para guitarra',
+          IdProducto: 'P-CDP-0002',
+          Nombre: 'Teclado Casio CTK-3500',
           Cantidad: '1',
-          PrecioUnitario: 20
+          PrecioUnitario: 150
         },{
-          IdProducto: 'P-CDP-0009',
-          Nombre: 'Guitarra Eléctrica Fender Stratocaster',
+          IdProducto: 'P-CDP-0003',
+          Nombre: 'Batería Pearl Export Series',
           Cantidad: '1',
-          PrecioUnitario: 750
+          PrecioUnitario: 800
         }
       ],
-      MontoTotal: 770
+      MontoTotal: 950
     },
     {
-      IdVenta: 'CDP-0003',
+      IdVenta: 'V-CDP-0003',
       TipoDePago: 'Efectivo',
       Fecha: '09/12/2024',
       Hora: '15:27',
       Productos: [
         {
-          IdProducto: 'P-CDP-0010',
-          Nombre: 'Cinturón para guitarra',
-          Cantidad: '10',
-          PrecioUnitario: 20
+          IdProducto: 'P-CDP-0004',
+          Nombre: 'Bajo Eléctrico Fender',
+          Cantidad: '5',
+          PrecioUnitario: 600
         }
       ],
-      MontoTotal: 200
+      MontoTotal: 3000
     },
     {
-      IdVenta: 'CDP-0004',
+      IdVenta: 'V-CDP-0004',
       TipoDePago: 'Efectivo',
       Fecha: '10/12/2024',
       Hora: '13:35',
@@ -124,21 +123,26 @@ export default function App() {
           Cantidad: '2',
           PrecioUnitario: 120
         },{
-          IdProducto: 'P-CDP-0006',
-          Nombre: 'Micrófono Shure SM58',
+          IdProducto: 'P-CDP-0001',
+          Nombre: 'Guitarra Acústica Yamaha',
           Cantidad: '1',
-          PrecioUnitario: 100
+          PrecioUnitario: 200
         }
       ],
-      MontoTotal: 340
+      MontoTotal: 440
     }
   ]);
 
-  const addVenta = (newVenta) =>
+  const [ventaID, setVentaID] = useState(ventas.length + 1);
+
+  const addVenta = (newVenta) => {
     setVentas([...ventas,{...newVenta}]);
-  const editVenta = (updatedVenta) => 
+    setVentaID(ventaID + 1);
+  }
+  const editVenta = (updatedVenta) => {
     setVentas(ventas.map((venta) => 
       (venta.IdVenta === updatedVenta.IdVenta ? updatedVenta : venta)));
+  } 
   const deleteVenta = (Id) => {
     setVentas(ventas.filter((venta) => venta.IdVenta !== Id));
   };
@@ -179,6 +183,7 @@ export default function App() {
                   )}
                   {activeView === 'Ventas' ? (
                     <Ventas 
+                      ID={ventaID}
                       productos={productos}
                       ventas={ventas} 
                       addVenta={addVenta}
