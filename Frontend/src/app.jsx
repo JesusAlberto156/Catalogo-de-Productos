@@ -54,6 +54,42 @@ export default function App() {
   };
   //PRODUCTOS
 
+    //INVENTARIO//
+    // Añadir estado y funciones para Inventario
+  const [inventarios, setInventarios] = useState([
+    {
+      IdInventario: 'I-CDP-0001',
+      IdProducto: 'P-CDP-0001',
+      Cantidad: 10,
+      Fecha: '10/12/2024',
+    },
+    {
+      IdInventario: 'I-CDP-0002',
+      IdProducto: 'P-CDP-0002',
+      Cantidad: 5,
+      Fecha: '11/12/2024',
+    },
+  ]);
+
+  const [inventarioID, setInventarioID] = useState(inventarios.length + 1);
+
+  const addInventario = (newItem) => {
+    const newId = 'I-CDP-${inventarioID.toString().padStart(4, "0")}';
+    setInventarios([...inventarios, { ...newItem, IdInventario: newId }]);
+    setInventarioID(inventarioID + 1);
+  };
+
+  const editInventario = (updatedItem) => {
+    setInventarios(inventarios.map((item) =>
+      item.IdInventario === updatedItem.IdInventario ? updatedItem : item
+    ));
+  };
+
+  const deleteInventario = (id) => {
+    setInventarios(inventarios.filter((item) => item.IdInventario !== id));
+  };
+  //INVENTARIO//
+
   //VENTAS
   const [ventas,setVentas] = useState([
     {
@@ -176,7 +212,12 @@ export default function App() {
                   )}
                   {activeView === 'Inventario' ? (
                     <Inventario
-                      Productos={productos}
+                    ID={inventarioID}
+                    productos={productos}
+                    inventarios={inventarios}
+                    addInventario={addInventario}
+                    editInventario={editInventario}
+                    deleteInventario={deleteInventario}
                     />
                   ):(
                     <></>
