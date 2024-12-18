@@ -1,7 +1,4 @@
 
-
-
-
 export default function Inventario({ Productos }) {
     return (
         <>
