@@ -74,7 +74,7 @@ export default function Sidebar({ onSwitchView }) {
         </div>
         <ul>
           <Tooltip title='Inicio' placement="right">
-            <li><a onClick={() => onSwitchView('Inicio')}>Inicio
+            <li><a>Inicio
                 <span style={{ marginLeft: "145px" }}><FaHome/></span>
               </a>
             </li>
@@ -86,7 +86,7 @@ export default function Sidebar({ onSwitchView }) {
             </li>
           </Tooltip>
           <Tooltip  title='Inventario' placement="right">
-            <li><a onClick={() => onSwitchView('Inventario')}>Inventario
+            <li><a>Inventario
                 <span style={{ marginLeft: "110px" }} className="icon-style-inventory"><MdOutlineInventory/></span>
               </a>
             </li>
@@ -99,7 +99,7 @@ export default function Sidebar({ onSwitchView }) {
           </Tooltip>
           <Tooltip  title='Cuenta' placement="right">
             <li>
-              <a onClick={() => onSwitchView('Cuenta')}>Cuenta
+              <a>Cuenta
                 <span style={{ marginLeft: "130px" }} className="icon-style-account"><MdAccountCircle/></span>
               </a>
             </li>  

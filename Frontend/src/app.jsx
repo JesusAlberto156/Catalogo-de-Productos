@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 export default function App() {
   
-  const [activeView, setActiveView] = useState('Inicio');
+  const [activeView, setActiveView] = useState('Productos');
   const switchView = (view) => setActiveView(view);
   
   //PRODUCTOS
@@ -210,18 +210,6 @@ export default function App() {
                   ):(
                     <></>
                   )}
-                  {activeView === 'Inventario' ? (
-                    <Inventario
-                    ID={inventarioID}
-                    productos={productos}
-                    inventarios={inventarios}
-                    addInventario={addInventario}
-                    editInventario={editInventario}
-                    deleteInventario={deleteInventario}
-                    />
-                  ):(
-                    <></>
-                  )}
                   {activeView === 'Ventas' ? (
                     <Ventas 
                       ID={ventaID}
@@ -231,11 +219,6 @@ export default function App() {
                       editVenta={editVenta}
                       deleteVenta={deleteVenta}
                     />
-                  ):(
-                    <></>
-                  )}
-                  {activeView === 'Cuenta' ? (
-                    <Cuenta/>
                   ):(
                     <></>
                   )}

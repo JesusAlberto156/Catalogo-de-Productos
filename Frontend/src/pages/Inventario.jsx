@@ -15,18 +15,18 @@ import { ButtonIconBlue,ButtonIconD,ButtonIconE,ButtonIconV,ContentButton,Pagina
 import { TablaVentas,Tabla,Td,Th,Tr } from "../components/styled/Tables";
 import { Tooltip } from "@mui/material";
 
-export default function Inventarios( ID, productos, inventarios, addInventario ) {
+export default function Inventarios( ID, productos, inventarios, addInventario,editInventario,deleteInventario ) {
     document.title = "CdP - Inventario";
 
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const recordsPerPage = 8;
 
-    const filteredRecords = inventarios.filter((inventario) =>
+    const filteredRecords = (inventarios || []).filter((inventario) =>
         Object.values(inventario).some((value) =>
-            value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+          value.toString().toLowerCase().includes(searchTerm.toLowerCase())
         )
-    );
+      );
 
     const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -49,7 +49,9 @@ export default function Inventarios( ID, productos, inventarios, addInventario )
 
     const [OpenModalGet, setOpenModalGet] = useState(false);
     const [OpenModalAdd, setOpenModalAdd] = useState(false);
-
+    const [OpenModalEdit, setOpenModalEdit] = useState(false);
+    const [OpenModalDelete, setOpenModalDelete] = useState(false);
+    
     const [Inventario, setInventario] = useState(null);
     const [InventarioId, setInventarioId] = useState(null);
 
@@ -118,7 +120,7 @@ export default function Inventarios( ID, productos, inventarios, addInventario )
                     <ButtonIconV disabled={selectedRow === null} onClick={() => toggleModalGet(selectedRow)}><GrView /></ButtonIconV>
                 </Tooltip>
                 <Tooltip title="Editar inventario">
-                    <ButtonIconE disabled={selectedRow === null} onClick={() => toggleModalEdit(selectedRow)}><IoMdCreate /></ButtonIconE>
+                    <ButtonIconE disabled={selectedRow === null} onClick={() => toggleModalEdit(selectedRow)}><MdModeEdit/></ButtonIconE>
                 </Tooltip>
                 <Tooltip title="Eliminar inventario">
                     <ButtonIconD disabled={selectedRow === null} onClick={() => toggleModalDelete(selectedRow)}><MdDelete /></ButtonIconD>
