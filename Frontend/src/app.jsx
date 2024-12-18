@@ -5,7 +5,7 @@ import Inicio from './pages/Inicio';
 import Productos from './pages/Productos';
 import Inventario from './pages/Inventario';
 import Ventas from './pages/Ventas';
-import Cuenta from './pages/Cuenta';
+
 
 import { useState } from 'react';
 
